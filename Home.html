@@ -1,0 +1,156 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="v.css">
+  </head>
+  <body class="one">
+     <div class="hero-header">
+      <div class="wrapper">
+        <header>
+          <div class="logo">
+            <i class="fa-solid fa-a"></i>
+            <div class="logo-text">Cold Drinks
+          </div>
+          </div>
+     <nav>
+              <div class="togglebtn">
+               <span></span>
+               <span></span>
+               <span></span>
+          </div>
+          <ul class="navlinks">
+<li><a href="#home">Home</a></li>
+<li><a href="#img">ITEMS</a></li> 
+<li>
+  <button class="cart-details-btn">
+      <i class="cart-icon">&#128722;</i>
+  </button>
+</li>
+          </ul>
+          </nav>
+          <div id="notification" class="notification">
+            <p>Item added to cart!</p>
+        </div>
+    
+          
+          <section id="home">
+            <h1 align=center>10 Cold Drinks to Stir up on a Hot Summer Day</h1>
+            
+          </section>
+          <div class="img" id="img"><br>
+            <img src="Watermelon-Mint.jpg">
+            <h1>Watermelon-Mint Agua Fresca</h1><h2>price ₹150</h2>
+            <button class="add-to-cart" data-name="Ghee Roast Dosa" data-price="150">Add to Cart</button><br><br>
+ <img src="Sparkling.jpg"><h1>
+Sparkling Cantaloupe Lemonade</h1><h2>price ₹300</h2><br>
+ <button class="add-to-cart" data-name="Chicken Fried Rice" data-price="300">Add to Cart</button><br><br>
+    <img src="Mango.jpg"><h1>Mango Smoothie</h1><h2>price ₹230</h2><br>
+    <button class="add-to-cart" data-name="Chicken  Biryani" data-price="230">Add to Cart</button><br><br>
+ <img src="Peach.jpg"><h1>Peach Iced Tea</h1><h2>price ₹250</h2><br>
+ <button class="add-to-cart" data-name="Gobi Manchurian Gravy" data-price="250">Add to Cart</button><br><br>
+  <img src="Tropical.jpg"><h1>Tropical Creamsicle Smoothie</h1><h2>price ₹270</h2><br><button class="add-to-cart" data-name="Podi Idli" data-price="270">Add to Cart</button><br><br>
+    <img src="Sparkl.jpg"><h1>Sparkling Pineapple Ginger Ale</h1><h2>price ₹290</h2><br><button class="add-to-cart" data-name="Schezwan Fried Rice" data-price="290">Add to Cart</button><br><br>
+ <img src="Cold Brew.jpg"><h1>Cold Brew Slushies</h1><h2>price ₹300</h2><br><button class="add-to-cart" data-name="Schezwan Noodles" data-price="300">Add to Cart</button><br><br>
+ <img src="Tropi.jpg"><h1>Tropical Lemonade</h1><h2>price ₹300</h2><br><button class="add-to-cart" data-name="Banana Chocolate Smoothie" data-price="300">Add to Cart</button><br><br>
+    <img src="Creamy.jpg"><h1>Creamy Date Shake</h1><h2>price ₹250</h2><br><button class="add-to-cart" data-name="Triple Chocolate Brownie Milkshake" data-price="250">Add to Cart</button><br><br>
+ <img src="Boozy.jpg"><h1>Boozy Watermelon Frozen Slushie</h1><h2>price ₹200</h2><br><button class="add-to-cart" data-name="Black Currant Milkshake" data-price="200">Add to Cart</button>
+          </div>
+          <div id="cart" class="cart">
+            <h2>Cart Details</h2>
+            <ul class="cart-items">
+            </ul>
+            <i class="close-cart">&times;</i>
+        </div>
+        <script>
+      var togglebtn=document.querySelector(".togglebtn");
+      var nav=document.querySelector(".navlinks");
+var links=document.querySelector(".navlinks li");
+ 
+ togglebtn.addEventListener("click", function(){
+   this.classList.toggle("click");
+   nav.classList.toggle("open");
+ })
+ let cart = [];
+
+
+function updateCartDisplay() {
+    const cartItems = document.querySelector('.cart-items');
+    cartItems.innerHTML = ''; 
+
+   
+    cart.forEach(item => {
+        const cartItem = document.createElement('div');
+        cartItem.className = 'cart-item';
+        cartItem.innerHTML = `
+            <span>${item.name} - Quantity: ${item.quantity}</span>
+            <button class="remove-from-cart" data-name="${item.name}">Remove</button>
+        `;
+        cartItems.appendChild(cartItem);
+    });
+}
+
+
+function addToCart(name, price) {
+   
+    const existingItem = cart.find(item => item.name === name);
+    if (existingItem) {
+        existingItem.quantity += 1; 
+    } else {
+      
+        cart.push({ name: name, price: price, quantity: 1 });
+    }
+    updateCartDisplay(); 
+    showNotification(); 
+}
+
+
+function removeFromCart(name) {
+    cart = cart.filter(item => item.name !== name);
+    updateCartDisplay();
+}
+
+
+const addToCartButtons = document.querySelectorAll('.add-to-cart');
+addToCartButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        const name = this.getAttribute('data-name');
+        const price = parseInt(this.getAttribute('data-price'));
+        addToCart(name, price);
+    });
+});
+
+
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.classList.contains('remove-from-cart')) {
+        const name = e.target.getAttribute('data-name');
+        removeFromCart(name);
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const cart = document.getElementById('cart');
+    const cartDetailsBtn = document.querySelector('.cart-details-btn');
+    const closeCartBtn = document.querySelector('.close-cart');
+
+    cartDetailsBtn.addEventListener('click', function() {
+        cart.classList.toggle('open');
+    });
+
+    closeCartBtn.addEventListener('click', function() {
+        cart.classList.remove('open');
+    });
+});
+
+
+function showNotification() {
+    const notification = document.getElementById('notification');
+    notification.classList.add('show');
+
+   
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+}
+    </script>
+  </body>
+</html>
